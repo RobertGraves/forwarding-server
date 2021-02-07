@@ -11,3 +11,4 @@ class TickerSerializer(serializers.ModelSerializer):
     class Meta:
         fields="__all__"
         model = Ticker
+        depth = 1
