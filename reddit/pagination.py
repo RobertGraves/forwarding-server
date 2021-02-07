@@ -6,4 +6,4 @@ class StandardResultsSetPagination(PageNumberPagination):
         return response
     page_size = 100
     page_size_query_param = 'page_size'
-    max_page_size=250
+    max_page_size=1000000

@@ -30,4 +30,4 @@ class TickerViewSet(ListModelMixin,RetrieveModelMixin,viewsets.GenericViewSet):
     ordering                = ['-id']
     filterset_fields        = "__all__"
     # filterset_class         = AllDjangoFilterBackend
-    queryset                = Ticker.objects.all()
+    queryset                = Ticker.objects.all().select_related('comment')
