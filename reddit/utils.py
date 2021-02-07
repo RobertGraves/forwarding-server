@@ -98,6 +98,7 @@ def parse_comment(comment):
         serializer = CommentSerializer(data=data)
         serializer.is_valid(raise_exception=True)
         obj = serializer.save()
+        print(f'obj saved {obj}')
         tickers = re.findall(r'\b\w{3,5}\b',comment.body.lower())
         parse_tickers(tickers,obj)
     except Exception as e:
@@ -114,7 +115,8 @@ def parse_tickers(tickers,comment):
                 print(f'saving ticker {data}')
                 serializer = TickerSerializer(data=data)
                 serializer.is_valid(raise_exception=True)
-                serializer.save()
+                obj = serializer.save()
+                print(f'ticker saved {obj}')
             except Exception as e:
                 print(e)
     return True

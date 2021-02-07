@@ -9,9 +9,15 @@ class Comment(models.Model):
     ups         = models.IntegerField()
     downs       = models.IntegerField()
     name        = models.CharField(max_length=155)
+    def __str__(self):
+        return self.name
+
 
 class Ticker(models.Model):
     comment     = models.ForeignKey(Comment,on_delete=models.CASCADE,null=True,blank=True)
     ticker      = models.CharField(max_length=255)
     timestamp   = models.DateTimeField(auto_now_add=True)
     update      = models.DateTimeField(auto_now=True)
+
+    def __str__(self):
+        return self.ticker
