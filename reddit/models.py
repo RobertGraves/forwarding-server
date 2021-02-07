@@ -9,6 +9,8 @@ class Comment(models.Model):
     ups         = models.IntegerField()
     downs       = models.IntegerField()
     name        = models.CharField(max_length=155)
+    timestamp   = models.DateTimeField(auto_now_add=True)
+    update      = models.DateTimeField(auto_now=True)
     def __str__(self):
         return self.name
 

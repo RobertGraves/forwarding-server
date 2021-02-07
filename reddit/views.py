@@ -16,8 +16,8 @@ class CommentViewSet(ListModelMixin,RetrieveModelMixin,viewsets.GenericViewSet):
     filter_backends         = [OrderingFilter,DjangoFilterBackend]
     ordering_fields         = '__all__'
     ordering                = ['-id']
-    filterset_fields        = "__all__"
-    # filterset_class         = AllDjangoFilterBackend
+    # filterset_fields        = "__all__"
+    filterset_class         = CommentFilterSet
     queryset                = Comment.objects.all()
 
 
@@ -28,6 +28,6 @@ class TickerViewSet(ListModelMixin,RetrieveModelMixin,viewsets.GenericViewSet):
     filter_backends         = [DjangoFilterBackend,OrderingFilter]
     ordering_fields         = '__all__'
     ordering                = ['-id']
-    filterset_fields        = "__all__"
-    # filterset_class         = AllDjangoFilterBackend
+    # filterset_fields        = "__all__"
+    filterset_class         = TickerFilterSet
     queryset                = Ticker.objects.all().select_related('comment')
