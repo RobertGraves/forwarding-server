@@ -7,7 +7,11 @@ class CommentSerializer(serializers.ModelSerializer):
         fields="__all__"
         model = Comment
 
-class TickerSerializer(serializers.ModelSerializer):
+class TickerWriteSerializer(serializers.ModelSerializer):
+    class Meta:
+        fields="__all__"
+        model = Ticker
+class TickerReadSerializer(serializers.ModelSerializer):
     class Meta:
         fields="__all__"
         model = Ticker
