@@ -43,7 +43,7 @@ class CommentFilterSet(FilterSet):
         model = Comment
         fields={
             'body':['iexact','icontains'],
-            'comment__name':['iexact','icontains'],
+            'name':['iexact','icontains'],
             'timestamp':['month','year','gte','lte','lt','gt'],
             'update':['month','year','gte','lte','lt','gt'],
             'id':['exact']
