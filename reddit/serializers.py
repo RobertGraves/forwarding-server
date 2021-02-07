@@ -16,3 +16,7 @@ class TickerReadSerializer(serializers.ModelSerializer):
         fields="__all__"
         model = Ticker
         depth = 1
+
+class AggregateTickerSerializer(serializers.Serializer):
+    class Meta:
+        fields="__all__"

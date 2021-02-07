@@ -7,15 +7,19 @@ from urllib.request import Request,urlopen
 import asyncio
 from datetime import datetime
 from .serializers import *
+from dateutil.relativedelta import relativedelta
+from django.db.models import Count
 #const
 
+try:
 #read-only
-reddit = praw.Reddit(
-    client_id=settings.REDDIT_CLIENT_ID,
-    client_secret=settings.REDDIT_CLIENT_SECRET,
-    user_agent=settings.REDDIT_USER_AGENT
-)
-
+    reddit = praw.Reddit(
+        client_id=settings.REDDIT_CLIENT_ID,
+        client_secret=settings.REDDIT_CLIENT_SECRET,
+        user_agent=settings.REDDIT_USER_AGENT
+    )
+except:
+    pass
 f = open('reddit/tickers.txt','r')
 string = f.read()
 f.close()
@@ -118,6 +122,10 @@ def parse_tickers(tickers,comment):
             except Exception as e:
                 print(e)
     return True
+
+def aggregate_tickers(start=datetime.now()-relativedelta(days=1),end=datetime.now()):
+    return Ticker.objects.values('ticker').order_by('ticker').annotate(count=Count('ticker')).order_by('-count')
+
 ##parsing all depths of comments
 # submission.comments.replace_more(limit=None)
 # for comment in submission.comments.list():

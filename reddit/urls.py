@@ -5,6 +5,7 @@ from .views import *
 router = routers.DefaultRouter()
 urlpatterns =[
     path(r'docs/', include_docs_urls(title='API Documentation')),
+    path(r'hot/',HotView.as_view(),name='hot')
     
 ]
 
