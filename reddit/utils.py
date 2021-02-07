@@ -9,14 +9,16 @@ from datetime import datetime
 from .serializers import *
 from dateutil.relativedelta import relativedelta
 from django.db.models import Count
+from rq import Queue
+from worker import conn
 #const
 
 try:
 #read-only
     reddit = praw.Reddit(
-        client_id=settings.REDDIT_CLIENT_ID,
-        client_secret=settings.REDDIT_CLIENT_SECRET,
-        user_agent=settings.REDDIT_USER_AGENT
+    client_id=settings.REDDIT_CLIENT_ID,
+    client_secret=settings.REDDIT_CLIENT_SECRET,
+    user_agent=settings.REDDIT_USER_AGENT
     )
 except:
     pass
@@ -86,6 +88,7 @@ dir comments
 """
 
 
+
 def listen_subreddit_stream(subreddit):
     for comment in reddit.subreddit(subreddit).stream.comments(skip_existing=True):
         parse_comment(comment)
@@ -125,6 +128,12 @@ def parse_tickers(tickers,comment):
 
 def aggregate_tickers(start=datetime.now()-relativedelta(days=1),end=datetime.now()):
     return Ticker.objects.values('ticker').order_by('ticker').annotate(count=Count('ticker')).order_by('-count')
+
+
+
+
+q = Queue(connection=conn)
+result = q.enqueue(listen_subreddit_stream,'wallstreetbets')
 
 ##parsing all depths of comments
 # submission.comments.replace_more(limit=None)

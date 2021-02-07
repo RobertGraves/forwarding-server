@@ -12,7 +12,10 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from dateutil.relativedelta import relativedelta
 from datetime import datetime
+import time
+from django.http import StreamingHttpResponse
 from django.db.models import Count
+from rest_framework.renderers import JSONRenderer
 
 class CommentViewSet(ListModelMixin,RetrieveModelMixin,viewsets.GenericViewSet):
     permission_classes      = [AllowAny]
@@ -53,3 +56,20 @@ class HotView(APIView):
         end = kwargs.get('end',datetime.now())
         # data = aggregate_tickers(start_date,end_date)
         return Response(Ticker.objects.filter(timestamp__gte=start,timestamp__lte=end).values('ticker').order_by('ticker').annotate(count=Count('ticker')).order_by('-count'),status=200)
+
+
+
+def stream(request):
+    def event_stream():
+        last_sent_id=0
+        while True:
+            time.sleep(1)
+            qs = Ticker.objects.filter(id__gt=last_sent_id).order_by('-id')[:5]
+            if qs.exists():
+                last_sent_id=qs[len(qs)-1].id
+                serializer = TickerReadSerializer(qs,many=True)
+                json = JSONRenderer().render(serializer.data)
+                yield json
+            else:
+                pass
+    return StreamingHttpResponse(event_stream(), content_type='text/event-stream')

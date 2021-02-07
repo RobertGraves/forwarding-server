@@ -5,8 +5,8 @@ from .views import *
 router = routers.DefaultRouter()
 urlpatterns =[
     path(r'docs/', include_docs_urls(title='API Documentation')),
-    path(r'hot/',HotView.as_view(),name='hot')
-    
+    path(r'hot/',HotView.as_view(),name='hot'),
+    path(r'stream/', stream, name='stream')
 ]
 
 router.register(r'comments',CommentViewSet)
