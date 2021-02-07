@@ -23,7 +23,7 @@ class CommentViewSet(ListModelMixin,RetrieveModelMixin,viewsets.GenericViewSet):
 
 class TickerViewSet(ListModelMixin,RetrieveModelMixin,viewsets.GenericViewSet):
     permission_classes      = [AllowAny]
-    serializer_class        = TickerSerializer
+    serializer_class        = TickerReadSerializer
     pagination_class        = StandardResultsSetPagination
     filter_backends         = [DjangoFilterBackend,OrderingFilter]
     ordering_fields         = '__all__'
