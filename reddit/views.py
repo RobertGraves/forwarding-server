@@ -58,18 +58,21 @@ class HotView(APIView):
         return Response(Ticker.objects.filter(timestamp__gte=start,timestamp__lte=end).values('ticker').order_by('ticker').annotate(count=Count('ticker')).order_by('-count'),status=200)
 
 
+##TODO duplicate false flagging view
+
+
 
 def stream(request):
     def event_stream():
-        last_sent_id=0
+        last_sent_id=2200
         while True:
             time.sleep(1)
-            qs = Ticker.objects.filter(id__gt=last_sent_id).order_by('-id')[:5]
+            qs = Ticker.objects.filter(id__gt=last_sent_id).order_by('-id')
             if qs.exists():
                 last_sent_id=qs[len(qs)-1].id
                 serializer = TickerReadSerializer(qs,many=True)
                 json = JSONRenderer().render(serializer.data)
                 yield json
             else:
-                pass
+                yield "/n"
     return StreamingHttpResponse(event_stream(), content_type='text/event-stream')
