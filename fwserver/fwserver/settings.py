@@ -21,7 +21,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/3.1/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'iw$7ri5zgkddpcuy*cy%oy@mm)sfo2u(w^jm_#4+kmk1&9tn0s'
+SECRET_KEY = os.environ.get('SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
@@ -127,6 +127,6 @@ STATIC_ROOT='/static/'
 ##DRF
 REST_FRAMEWORK = { 'DEFAULT_SCHEMA_CLASS': 'rest_framework.schemas.coreapi.AutoSchema' }
 
-REDDIT_CLIENT_ID="HGgxb97QxSk83A"
-REDDIT_CLIENT_SECRET="GKP6Q_y6kfgUHkQR07fckZVLR-BMgA"
-REDDIT_USER_AGENT="Test Scraping Bot (RioGraves)"
+REDDIT_CLIENT_ID=os.environ.get('REDDIT_CLIENT_ID')
+REDDIT_CLIENT_SECRET=os.environ.get('REDDIT_CLIENT_SECRET')
+REDDIT_USER_AGENT=os.environ.get('REDDIT_USER_AGENT')
