@@ -18,6 +18,7 @@ from django.urls import path
 from .views import *
 
 urlpatterns = [
+    path('',HookView.as_view()),
     path('admin/', admin.site.urls),
     path('webhook/',HookView.as_view())
 ]

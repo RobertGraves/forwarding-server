@@ -37,6 +37,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'reddit',
 ]
 
 MIDDLEWARE = [
@@ -119,3 +120,8 @@ USE_TZ = True
 
 STATIC_URL = '/static/'
 STATIC_ROOT='/static/'
+
+
+REDDIT_CLIENT_ID="HGgxb97QxSk83A"
+REDDIT_CLIENT_SECRET="GKP6Q_y6kfgUHkQR07fckZVLR-BMgA"
+REDDIT_USER_AGENT="Test Scraping Bot (RioGraves)"

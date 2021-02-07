@@ -3,6 +3,8 @@ from rest_framework.response import Response
 
 
 class HookView(APIView):
+    def get(self,request,*args,**kwargs):
+        return Response(status=200)
     def post(self,request,*args,**kwargs):
         print(f"request {request}")
         print(f"request.POST {request.POST}")
