@@ -10,7 +10,7 @@ from .serializers import *
 from dateutil.relativedelta import relativedelta
 from django.db.models import Count
 from rq import Queue
-from worker import conn
+from .worker import conn
 #const
 
 try:
