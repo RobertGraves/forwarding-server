@@ -151,6 +151,7 @@ HUEY = {
     'blocking': False,  # Poll the queue rather than do blocking pop.
     'backend_class': 'huey.RedisHuey',  # Use path to redis huey by default,
     'connection': {'url': os.environ.get('REDIS_URL')},
+    'immediate':False,
     'consumer': {
         'workers': 1,
         'worker_type': 'thread',
