@@ -6,11 +6,11 @@ import requests
 from urllib.request import Request,urlopen
 import asyncio
 from datetime import datetime
-from .serializers import *
+from reddit.serializers import *
 from dateutil.relativedelta import relativedelta
 from django.db.models import Count
 from rq import Queue
-from .worker import conn
+from reddit.worker import conn
 #const
 
 try:
@@ -26,12 +26,8 @@ f = open('reddit/tickers.txt','r')
 string = f.read()
 f.close()
 ticker_list = string.split()
-
-
-
 """
 DIR of reddit submissions
-
 sh__', '__init__', '__init_subclass__', '__le__', '__lt__', '__module__', '__ne__', '__new__', '__reduce__', '__reduce_ex__', '__repr__',
  '__setattr__', '__sizeof__', '__str__', '__subclasshook__', '__weakref__', '_chunk', '_comments_by_id', '_fetch', '_fetch_data', '_fetch_info', 
  '_fetched', '_kind', '_reddit', '_reset_attributes', '_safely_add_arguments', '_url_parts', '_vote', 'all_awardings', 'allow_live_comments', 'approved_at_utc', 
@@ -57,17 +53,10 @@ sh__', '__init__', '__init_subclass__', '__le__', '__lt__', '__module__', '__ne_
 'num_comments', 'num_crossposts', 'num_reports', 'over_18', 'parent_whitelist_status', 'parse', 'permalinkwarded_type', 'total_awards_received', 'treatment_tags', 
 'unhide', 'unsave', 'ups', 'upvote', 'upvote_ratio', 'url', 'user_reports', 'view_count', 'visited', 'w_media', 'secure_media_embed', 'selftext', 'selftext_html', 
 'send_replies', 'shortlink', 'spoiler', 'stickied', 'subreddit', 'subreddit_id', 'subreddit_name_prefixehitelist_status', 'wls'] 
-
-
-
-
 dir comment forest
-
 ['__class__', '__delattr__', '__dict__', '__dir__', '__doc__', '__eq__', '__format__', '__ge__', '__getattribute__', '__getitem__', '__gt__', '__hash__', 
 '__init__', '__init_subclass__', '__le__', '__len__', '__lt__', '__module__', '__ne__', '__new__', '__reduce__', '__reduce_ex__', '__repr__', '__setattr__', '__sizeof__', 
 '__str__', '__subclasshook__', '__weakref__', '_comments', '_gather_more_comments', '_insert_comment', '_submission', '_update', 'list', 'replace_more']
-
-
 dir comments
 ['MISSING_COMMENT_MESSAGE', 'STR_FIELD', '__class__', '__delattr__', '__dict__', '__dir__', '__doc__', '__eq__', '__format__', '__ge__', 
 '__getattr__', '__getattribute__', '__gt__', '__hash__', '__init__', '__init_subclass__', '__le__', '__lt__', '__module__', '__ne__', 
@@ -86,13 +75,9 @@ dir comments
 'removal_reason', 'replies', 'reply', 'report', 'report_reasons', 'save', 'saved', 'score', 'score_hidden', 'send_replies', 'stickied', 'submission', 'subreddit', 'subreddit_id', 'subreddit_name_prefixed', 
 'subreddit_type', 'top_awarded_type', 'total_awards_received', 'treatment_tags', 'uncollapse', 'unsave', 'ups', 'upvote', 'user_reports']
 """
-
-
-
 def listen_subreddit_stream(subreddit):
     for comment in reddit.subreddit(subreddit).stream.comments(skip_existing=True):
         parse_comment(comment)
-    
 def parse_comment(comment):
     try:
         data={
@@ -109,7 +94,6 @@ def parse_comment(comment):
         parse_tickers(tickers,obj)
     except Exception as e:
         print(e)
-
 def parse_tickers(tickers,comment):
     for ticker in tickers:
         if ticker in ticker_list:
@@ -125,23 +109,8 @@ def parse_tickers(tickers,comment):
             except Exception as e:
                 print(e)
     return True
+def main():
+    listen_subreddit_stream('wallstreetbets')
 
-def aggregate_tickers(start=datetime.now()-relativedelta(days=1),end=datetime.now()):
-    return Ticker.objects.values('ticker').order_by('ticker').annotate(count=Count('ticker')).order_by('-count')
-
-
-
-
-q = Queue(connection=conn)
-result = q.enqueue(listen_subreddit_stream,'wallstreetbets')
-
-##parsing all depths of comments
-# submission.comments.replace_more(limit=None)
-# for comment in submission.comments.list():
-#     ##TODO parse
-#     print(comment.body)
-#     ##naive finding tickers
-#     # re.findall(r'[$][A-Za-z][\S]*',comment.body)
-
-#     ##all boundary with 3 letters \b\w{3}\b
-#     # re.findall(r'\b\w{3}\b',comment.body)
+if __name__ == "__main__":
+    main()
