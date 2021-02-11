@@ -51,10 +51,14 @@ class HotView(APIView):
     # ordering_fields         = '__all__'
     # queryset = Ticker.objects.values('ticker').order_by('ticker').annotate(count=Count('ticker')).order_by('-count')
     def get(self,request,*args,**kwargs):
+        hour = kwargs.get('hour',False)
         ##TODO sanitize to allow time since epoch or strftime formats?
         start= kwargs.get('start',datetime.now()-relativedelta(days=1))
         end = kwargs.get('end',datetime.now())
         # data = aggregate_tickers(start_date,end_date)
+        if hour:
+            start = datetime.now()-relativedelta(hours=1)
+            end=datetime.now()
         return Response(Ticker.objects.filter(timestamp__gte=start,timestamp__lte=end).values('ticker').order_by('ticker').annotate(count=Count('ticker')).order_by('-count'),status=200)
 
 
