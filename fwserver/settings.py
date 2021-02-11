@@ -80,16 +80,16 @@ WSGI_APPLICATION = 'fwserver.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/3.1/ref/settings/#databases
 
-# DATABASES = {
-#     'default': {
-#         'ENGINE': 'django.db.backends.sqlite3',
-#         'NAME': BASE_DIR / 'db.sqlite3',
-#     }
-# }
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': BASE_DIR / 'db.sqlite3',
+    }
+}
 
-DATABASES={}
+# DATABASES={}
 
-DATABASES['default'] = dj_database_url.config(conn_max_age=600)
+# DATABASES['default'] = dj_database_url.config(conn_max_age=600)
 
 # Password validation
 # https://docs.djangoproject.com/en/3.1/ref/settings/#auth-password-validators
@@ -144,6 +144,7 @@ REDDIT_USER_AGENT=os.environ.get('REDDIT_USER_AGENT')
 
 
 HUEY = {
+    'name':'huey-app',
     'result_store': True,  # Store return values of tasks.
     'events': True,  # Consumer emits events allowing real-time monitoring.
     'store_none': False,  # If a task returns None, do not save to results.
