@@ -89,42 +89,42 @@ dir comments
 
 
 
-def listen_subreddit_stream(subreddit):
-    for comment in reddit.subreddit(subreddit).stream.comments(skip_existing=True):
-        parse_comment(comment)
+# def listen_subreddit_stream(subreddit):
+#     for comment in reddit.subreddit(subreddit).stream.comments(skip_existing=True):
+#         parse_comment(comment)
     
-def parse_comment(comment):
-    try:
-        data={
-            'body':comment.body,
-            'created':datetime.utcfromtimestamp(comment.created),
-            'ups':comment.ups,
-            'downs':comment.downs,
-            'name':comment.name
-        }
-        serializer = CommentSerializer(data=data)
-        serializer.is_valid(raise_exception=True)
-        obj = serializer.save()
-        tickers = re.findall(r'\b\w{2,5}\b',comment.body.lower())
-        parse_tickers(tickers,obj)
-    except Exception as e:
-        print(e)
+# def parse_comment(comment):
+#     try:
+#         data={
+#             'body':comment.body,
+#             'created':datetime.utcfromtimestamp(comment.created),
+#             'ups':comment.ups,
+#             'downs':comment.downs,
+#             'name':comment.name
+#         }
+#         serializer = CommentSerializer(data=data)
+#         serializer.is_valid(raise_exception=True)
+#         obj = serializer.save()
+#         tickers = re.findall(r'\b\w{2,5}\b',comment.body.lower())
+#         parse_tickers(tickers,obj)
+#     except Exception as e:
+#         print(e)
 
-def parse_tickers(tickers,comment):
-    for ticker in tickers:
-        if ticker in ticker_list:
-            try:
-                data={
-                    'ticker':ticker,
-                    'comment':comment.id
-                }
-                serializer = TickerWriteSerializer(data=data)
-                serializer.is_valid(raise_exception=True)
-                obj = serializer.save()
-                print(f'ticker saved {obj}')
-            except Exception as e:
-                print(e)
-    return True
+# def parse_tickers(tickers,comment):
+#     for ticker in tickers:
+#         if ticker in ticker_list:
+#             try:
+#                 data={
+#                     'ticker':ticker,
+#                     'comment':comment.id
+#                 }
+#                 serializer = TickerWriteSerializer(data=data)
+#                 serializer.is_valid(raise_exception=True)
+#                 obj = serializer.save()
+#                 print(f'ticker saved {obj}')
+#             except Exception as e:
+#                 print(e)
+#     return True
 
 def aggregate_tickers(start=datetime.now()-relativedelta(days=1),end=datetime.now()):
     return Ticker.objects.values('ticker').order_by('ticker').annotate(count=Count('ticker')).order_by('-count')
